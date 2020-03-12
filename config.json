@@ -1,3 +1,5 @@
 {
-    "type":"fluxo"
+    "type":"fluxo",
+    "arquivos":["fluxo.yaml"],
+    "name": "AIDA-fluxo"
 }
