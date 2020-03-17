@@ -1,5 +1,6 @@
 import yaml
 import random
+import logging
 
 # 
 #  A estrutura
@@ -16,11 +17,13 @@ import random
 
 
 class Fluxo:
-    def __init__(self):
-        pass
+    def __init__(self,diretory="fluxo.yaml"):
+        self.diretory = diretory
+        logging.debug("{} - {}".format(self.__class__,"Fluxo Carregado {}".format(diretory)))
+        
     
-    def main(self,dir = 'fluxo.yaml'):
-        with open(dir,'r') as f:
+    def main(self):
+        with open(self.diretory,'r') as f:
             self.states = yaml.load(f.read(),Loader=yaml.FullLoader)
         self.state = self.states['init']
         self.checkState()
@@ -28,6 +31,7 @@ class Fluxo:
 
     def restartState(self):
         self.state = self.states['init']
+        logging.debug("{} - {}".format(self.__class__,"Fluxo Resetado"))
 
     def responseState(self):
         if "response" not in self.states[self.state].keys():
@@ -40,8 +44,10 @@ class Fluxo:
             response = self.states[self.state]['response']
         return response
     def nextState(self,intent):
+        logging.debug("{} - {}".format(self.__class__,"Proximo Estado"))
+        
         if "output" not in self.states[self.state].keys():
-            print(self.__class__,"Encerrar chabot")
+            logging.debug("{} - {}".format(self.__class__,"Encerrar Fluxo"))
             exit(0)
 
         if intent in self.states[self.state]['output'].keys():
@@ -53,14 +59,15 @@ class Fluxo:
                 self.state = self.states[self.state]['output'][intent]
                 self.checkState()
             else:
-                print(self.__class__,"Não há um proximo estado")
+                plogging.debug("{} - {}".format(self.__class__,"Não Há um Proximo estado"))
                 exit(1)
 
     def checkState(self):
         if self.state in self.states.keys():
             return True
         else:
-            print(self.__class__,"Label Não existente, estado inválido")
+            logging.debug("{} - {}".format(self.__class__,"Label não existente ou estado inválido"))
             exit(1)
-a = Fluxo()
-a.main()
+if if __name__ == "__main__":
+    a = Fluxo()
+    a.main()
